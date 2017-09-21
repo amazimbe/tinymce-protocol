@@ -12,11 +12,10 @@ const plugin = (editor) => {
           return { title: protocol.get('title'), content: protocol.get('content') };
         });
 
-        let view, html, window;
-        view = { protocols: Handlebars.compile(template) };
-        html = view.protocols({ protocols });
+        let view = { protocols: Handlebars.compile(template) };
+        let html = view.protocols({ protocols });
 
-        window = editor.windowManager.open({
+        let window = editor.windowManager.open({
           title: 'Protocols',
           height: 360,
           width: 460,
@@ -26,7 +25,7 @@ const plugin = (editor) => {
               window.close();
             }
           }],
-          html: html,
+          html,
           classes: 'protocols_modal'
         });
 
