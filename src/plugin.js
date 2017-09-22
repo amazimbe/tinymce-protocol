@@ -1,21 +1,40 @@
-import _ from 'lodash';
+import Handlebars from 'handlebars';
+import template from './template';
 
 const plugin = (editor) => {
   editor.addButton('protocol', {
-    text: 'protocol',
-    icon: false,
-    onclick: () => {
-      // Open window
-      editor.windowManager.open({
-        title: 'protocol plugin',
-        body: [
-          { type: 'textbox', name: 'title' }
-        ],
-        onsubmit(e) {
-          // Insert content when the window form is submitted
-          const kebabbyString = _.kebabCase(e.data.title);
-          editor.insertContent(kebabbyString);
-        }
+    tooltip: 'Protocol',
+    icon: 'protocols',
+
+    onclick() {
+      editor.settings.store.findAll('protocol', { reload: true }).then(protocols => {
+        protocols = protocols.filterBy('canEditContent', true).map(protocol => {
+          return { title: protocol.get('title'), content: protocol.get('content') };
+        });
+
+        let view = { protocols: Handlebars.compile(template) };
+        let html = view.protocols({ protocols });
+
+        let window = editor.windowManager.open({
+          title: 'Protocols',
+          height: 360,
+          width: 460,
+          buttons: [{
+            text: 'Cancel',
+            onclick() {
+              window.close();
+            }
+          }],
+          html,
+          classes: 'protocols-modal'
+        });
+
+        $('.available-protocols li a').click((event) => {
+          let element = $(event.target);
+          html = element.parent().find('.protocol-data').html();
+          editor.insertContent(html);
+          window.close();
+        });
       });
     }
   });
