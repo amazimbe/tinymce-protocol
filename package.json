@@ -22,7 +22,6 @@
     "webpack-dev-server": "^1.16.2"
   },
   "dependencies": {
-    "handlebars": "^4.0.10",
     "lodash": "^4.17.4"
   },
   "license": "MIT"
