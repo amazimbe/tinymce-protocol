@@ -26,12 +26,12 @@ const plugin = (editor) => {
             }
           }],
           html,
-          classes: 'protocols_modal'
+          classes: 'protocols-modal'
         });
 
-        $('.protocols_list li a').click((event) => {
+        $('.available-protocols li a').click((event) => {
           let element = $(event.target);
-          html = element.parent().find('.protocol_data').html();
+          html = element.parent().find('.protocol-data').html();
           editor.insertContent(html);
           window.close();
         });
